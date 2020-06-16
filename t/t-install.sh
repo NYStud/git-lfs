@@ -278,6 +278,24 @@ begin_test "install --local outside repository"
 )
 end_test
 
+begin_test "install --local with conflicting scope"
+(
+  set -e
+
+  mkdir install-scope-conflict
+  cd install-scope-conflict
+  git init
+
+  set +e
+  git lfs install --local --system 2>err.log
+  res=$?
+  set -e
+
+  [ "Only one of --local and --system options can be specified." = "$(cat err.log)" ]
+  [ "0" != "$res" ]
+)
+end_test
+
 begin_test "install in directory without access to .git/lfs"
 (
   set -e
